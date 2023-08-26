@@ -3,8 +3,11 @@
 function crearTablaContactos()
 {
 
-    let tabla = document.getElementById('tablaContactos');
-    if(tabla) tabla.remove();
+    //Borrar Tabla
+    eliminarTabla();
+
+    //Crear loader
+    crearLoaderPuntos('divContactos');
 
     google.script.run
     .withSuccessHandler(crearTablaContactosCorrectamente)
@@ -53,12 +56,18 @@ function crearTablaContactosCorrectamente(obj)
 
         //mostrar notificacion de ok
         crearNotificacionOK('Contactos obtenidos correctamente', 'Todo en orden');
+
+        //eliminar loader
+        eliminarLoader();
     }
 
     function crearTablaContactosError()
     {
         //mostrar notificación de error
         crearNotificacionError('Los contactos no han sido obtenidos', 'Error de datos');
+
+        //eliminar loader
+        eliminarLoader();
     }
 
     //crear la notificación
@@ -108,8 +117,41 @@ function crearTablaContactosCorrectamente(obj)
         elementoNotificacion.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(color);
     }
 
+    //Crear funcion loader
+    function crearLoader(elementoPadre)
+    {
+        eliminarLoader();
+        let loader = document.createElement('div');
+        loader.id = 'loader';
+        loader.appendChild(document.createElement('div'));
+        loader.appendChild(document.createElement('div'));
+        loader.appendChild(document.createElement('div'));
+        loader.appendChild(document.createElement('div'));
+        return document.getElementById(elementoPadre).appendChild(loader);
+    }
 
+    function crearLoaderPuntos(elementoPadre)
+    {
+        let loader =crearLoader(elementoPadre);
+        loader.classList.add('lds-ellipsis');
+    }
 
-    
+    function crearLoaderAnillo(elementoPadre)
+    {
+        let loader =crearLoader(elementoPadre);
+        loader.classList.add('lds-ring');
+    }
+
+    function eliminarLoader()
+    {
+        let loader = document.getElementById('loader');
+        if(loader)loader.remove();
+    }
+
+    function eliminarTabla()
+    {
+        let tabla = document.getElementById('tablaContactos');
+        if(tabla) tabla.remove();
+    }
 
 </script>
